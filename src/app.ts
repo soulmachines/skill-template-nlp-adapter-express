@@ -75,6 +75,7 @@ app.post('/execute', (req: Request, res: Response) => {
     endConversation: true,
   };
 
+  res.setHeader('content-type', 'application/json');
   res.send(smResponse);
 });
 
