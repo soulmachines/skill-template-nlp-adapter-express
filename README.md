@@ -25,3 +25,9 @@ Test the app's endpoints using Postman:
 - POST Init: [http://localhost:3000/init]()
 - POST Session: [http://localhost:3000/session]()
 - POST Execute: [http://localhost:3000/execute]()
+
+## Serve for use with Studio
+
+```
+npx localtunnel --port 3000 --subdomain your-unique-id
+```

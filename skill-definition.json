@@ -1,3 +1,14 @@
 {
-  "TODO": "skill_definition"
+  "name": "Dev Cafe Demo Skill",
+  "summary": "One line summary of skill",
+  "description": "Brief description of the skill",
+  "status": "ACTIVE",
+  "serviceProvider": "SKILL_API",
+  "endpointExecute": "https://dev-cafe.loca.lt/execute",
+  "config": {
+    "skillType": "BASE_CORPUS",
+    "configMeta": [
+      {}
+    ]
+  }
 }
