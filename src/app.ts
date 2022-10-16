@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT ?? 3000;
 
 /**
  * Init Endpoint
@@ -65,12 +65,12 @@ app.post('/execute', (req: Request, res: Response) => {
   // 5. Construct SM-formatted response body
   const smResponse: ExecuteResponse = {
     output: {
-      text: spokenResponse,
-      variables: {
-        _public: {
-          ...cards,
-        },
-      },
+      text: 'spokenResponse',
+      // variables: {
+      //   _public: {
+      //     ...cards,
+      //   },
+      // },
     },
     endConversation: true,
   };
