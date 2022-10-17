@@ -10,6 +10,8 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT ?? 3000;
 
+app.use(express.json());
+
 /**
  * Init Endpoint
  * https://docs.soulmachines.com/skills/api#tag/Init
