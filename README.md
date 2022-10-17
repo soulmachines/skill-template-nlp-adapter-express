@@ -26,6 +26,16 @@ Test the app's endpoints using Postman:
 - POST Session: [http://localhost:3000/session]()
 - POST Execute: [http://localhost:3000/execute]()
 
+## Debugging with VS Code
+
+You can attach to an already-running app:
+
+- Open "Run and Debug" tab in left sidebar
+- Run "Node: Nodemon"
+- Select the process for `app.ts`
+
+Add breakpoints by clicking to the left of a line number in the code editor.
+
 ## Serve for use with Studio
 
 ```
