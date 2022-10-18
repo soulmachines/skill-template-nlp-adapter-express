@@ -2,7 +2,9 @@ import {
   ExecuteRequest,
   ExecuteResponse,
   InitRequest,
+  Memory,
   SessionRequest,
+  SessionResponse,
 } from '@soulmachines/smskillsdk';
 import { Request, Response } from 'express';
 import { FakeNLPService } from './fake-nlp-service';
@@ -28,10 +30,33 @@ app.post('/init', (req: Request, res: Response) => {
  * Session Endpoint
  * https://docs.soulmachines.com/skills/api#tag/Session
  *
- * Runs when a person begins a conversation with a DP using this Skill
+ * Runs before the very first interaction between a user and a DP using this Skill
  */
-app.post('/session', (req: Request, res: Response) => {
+app.post('/session', async (req: Request, res: Response) => {
+  // 1. Get the Soul Machines request object
   const smRequest = req.body as SessionRequest;
+
+  // 2. Extract relevant data
+  const { sessionId, memory, config } = smRequest;
+
+  // 2a. Extract skill config and its relevant credentials from the request
+  const { firstCredentials, secondCredentials } = config! as any;
+
+  // 3. Make request to third party service to initialize session-specific resources
+  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
+
+  // 4. Extract relevant response data from the third party service
+  const memoryResources = await fakeNLPService.initSessionResources(sessionId) as Memory[];
+  
+  // 5. Construct SM-formatted response body
+  const smResponse: SessionResponse = {
+    memory: [
+      ...memory ?? [],
+      ...memoryResources ?? [],
+    ],
+  };
+
+  res.send(smResponse);
 });
 
 /**
@@ -52,7 +77,7 @@ app.post('/execute', async (req: Request, res: Response) => {
   const userInput = smRequest.text;
 
   // 3. Make request to third party service
-  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials)
+  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
 
   // 4. Extract relevant response data from the third party service
   const { spokenResponse, cardsResponse } = await fakeNLPService.send(userInput);
@@ -70,7 +95,6 @@ app.post('/execute', async (req: Request, res: Response) => {
     endConversation: true,
   };
 
-  res.setHeader('content-type', 'application/json');
   res.send(smResponse);
 });
 

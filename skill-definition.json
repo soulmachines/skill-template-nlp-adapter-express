@@ -5,6 +5,7 @@
   "status": "ACTIVE",
   "serviceProvider": "SKILL_API",
   "endpointExecute": "https://dev-cafe.loca.lt/execute",
+  "endpointSession": "https://dev-cafe.loca.lt/session",
   "config": {
     "skillType": "BASE_CORPUS",
     "configMeta": [

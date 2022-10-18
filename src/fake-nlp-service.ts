@@ -1,4 +1,4 @@
-import { mockGetResponse } from "./mock-request";
+import { mockGetResponse, mockInitResources } from "./mock-request";
 
 // Example third party service
 export class FakeNLPService {
@@ -18,6 +18,11 @@ export class FakeNLPService {
     }
 
     console.log('Authenticated!');
+  }
+
+  // Example of initializing resources with third party NLP call 
+  initSessionResources(sessionId: string) {
+    return mockInitResources(sessionId);
   }
 
   // Example of sending input to the third party NLP call 

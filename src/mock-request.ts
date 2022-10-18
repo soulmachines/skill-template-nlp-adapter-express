@@ -1,12 +1,13 @@
+/**
+ * These functions use Promises and setTimeouts to mock HTTP requests to a third part NLP service
+ * and should be replaced with the actual HTTP calls when implementing.
+ */
+
 interface MockGetResponse {
   spokenResponse: string;
   cardsResponse: object;
 }
 
-/**
- * This uses Promises and setTimeouts to mock a HTTP request to a third part API
- * and should be replaced with the actual HTTP call when implementing.
- */ 
 export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => {
   return new Promise((resolve) => {
     const spokenResponse = `Hello! @showcards(myImageCard) Here is a kitten.`;
@@ -23,6 +24,28 @@ export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => 
     setTimeout(() => {
       console.log(userInput);
       resolve({ spokenResponse, cardsResponse });
+    }, 0);
+  });
+};
+
+export const mockInitResources = (sessionId: string): Promise<any[]> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const memory = [
+        {
+          sessionId,
+          name: "public string memory",
+          value: "This is to be persisted",
+          scope: "PUBLIC",
+        },
+        {
+          sessionId,
+          name: "private json memory",
+          value: { example: "object" },
+          scope: "PRIVATE",
+        },
+      ]; 
+      resolve(memory);
     }, 0);
   });
 };
