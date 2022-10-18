@@ -8,7 +8,18 @@
   "config": {
     "skillType": "BASE_CORPUS",
     "configMeta": [
-      {}
+      {
+        "label": "Third Party Credentials 1",
+        "name": "firstCredentials",
+        "required": true,
+        "type": "TEXT"
+      },
+      {
+        "label": "Third Party Credentials 2",
+        "name": "secondCredentials",
+        "required": true,
+        "type": "PASSWORD"
+      }
     ]
   }
 }

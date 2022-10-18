@@ -5,6 +5,7 @@ import {
   SessionRequest,
 } from '@soulmachines/smskillsdk';
 import { Request, Response } from 'express';
+import { FakeNLPService } from './fake-nlp-service';
 
 const express = require('express');
 const app = express();
@@ -39,41 +40,32 @@ app.post('/session', (req: Request, res: Response) => {
  *
  * Runs when user input is forwarded to this Skill
  */
-app.post('/execute', (req: Request, res: Response) => {
+app.post('/execute', async (req: Request, res: Response) => {
   // 1. Get the Soul Machines request object
   const smRequest = req.body as ExecuteRequest;
 
   // 2. Extract relevant data
-  const skillConfiguration = smRequest.config;
+  // 2a. Extract skill config and its relevant credentials from the request
+  const { firstCredentials, secondCredentials } = smRequest.config! as any;
+
+  // 2c. Extract user input
   const userInput = smRequest.text;
 
   // 3. Make request to third party service
-  // TODO
-  // eg:
-  // const botService = new BotService(skillConfiguration.apiKey)
-  // const spokenResponse = botService.send(userInput);
+  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials)
 
   // 4. Extract relevant response data from the third party service
-  const spokenResponse = 'Hello! @showcards(myImageCard) Here is a kitten.';
-  const cards = {
-    myImageCard: {
-      type: 'image',
-      data: {
-        src: 'https://placekitten.com/200/200',
-        alt: 'An adorable kitten',
-      },
-    },
-  };
+  const { spokenResponse, cardsResponse } = await fakeNLPService.send(userInput);
 
   // 5. Construct SM-formatted response body
   const smResponse: ExecuteResponse = {
     output: {
-      text: 'spokenResponse',
-      // variables: {
-      //   _public: {
-      //     ...cards,
-      //   },
-      // },
+      text: spokenResponse,
+      variables: {
+        _public: {
+          ...cardsResponse,
+        },
+      },
     },
     endConversation: true,
   };
