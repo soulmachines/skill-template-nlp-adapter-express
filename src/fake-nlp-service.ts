@@ -1,4 +1,4 @@
-import { mockGetResponse, mockInitResources } from "./mock-request";
+import { mockGetResponse, mockInitResources, mockInitActions } from "./mock-request";
 
 // Example third party service
 export class FakeNLPService {
@@ -18,6 +18,11 @@ export class FakeNLPService {
     }
 
     console.log('Authenticated!');
+  }
+
+  // Example of initializing Skill-specific actions on third party NLP call
+  initActions() {
+    return mockInitActions();
   }
 
   // Example of initializing resources with third party NLP call 
