@@ -8,22 +8,12 @@ interface MockGetResponse {
   cardsResponse: object;
 }
 
-export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => {
+export const mockInitActions = (): Promise<void> => {
   return new Promise((resolve) => {
-    const spokenResponse = `Hello! @showcards(myImageCard) Here is a kitten.`;
-    const cardsResponse = {
-      myImageCard: {
-        type: 'image',
-        data: {
-          src: 'https://placekitten.com/200/200',
-          alt: 'An adorable kitten',
-        },
-      },
-    };
-
     setTimeout(() => {
-      console.log(userInput);
-      resolve({ spokenResponse, cardsResponse });
+      console.log("Pre-training initialized. . .");
+      console.log("Pre-training completed");
+      resolve();
     }, 0);
   });
 };
@@ -46,6 +36,26 @@ export const mockInitResources = (sessionId: string): Promise<any[]> => {
         },
       ]; 
       resolve(memory);
+    }, 0);
+  });
+};
+
+export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => {
+  return new Promise((resolve) => {
+    const spokenResponse = `Hello! @showcards(myImageCard) Here is a kitten.`;
+    const cardsResponse = {
+      myImageCard: {
+        type: 'image',
+        data: {
+          src: 'https://placekitten.com/200/200',
+          alt: 'An adorable kitten',
+        },
+      },
+    };
+
+    setTimeout(() => {
+      console.log(userInput);
+      resolve({ spokenResponse, cardsResponse });
     }, 0);
   });
 };
