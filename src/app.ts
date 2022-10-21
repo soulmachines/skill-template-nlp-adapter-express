@@ -22,8 +22,22 @@ app.use(express.urlencoded({ extended: true }));
  *
  * Runs when a DDNA Studio project is deployed with this Skill configured
  */
-app.post('/init', (req: Request, res: Response) => {
+app.post('/init', async (req: Request, res: Response) => {
+  // 1. Get the Soul Machines request object
   const smRequest = req.body as InitRequest;
+
+  // 2. Extract relevant data
+  const { projectId, config } = smRequest; // config only present if this Skill is stateless
+
+  // 2a. Extract skill config and its relevant credentials from the request
+  const { firstCredentials, secondCredentials } = config! as any;
+
+  // 3. Make request to third party service to initialize
+  // any configuration, data storage, or pre-training on the NLP service before executing this Skill
+  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
+  await fakeNLPService.initActions();
+  
+  res.send();
 });
 
 /**

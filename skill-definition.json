@@ -4,8 +4,9 @@
   "description": "Brief description of the skill",
   "status": "ACTIVE",
   "serviceProvider": "SKILL_API",
-  "endpointExecute": "https://dev-cafe.loca.lt/execute",
+  "endpointInit": "https://dev-cafe.loca.lt/init",
   "endpointSession": "https://dev-cafe.loca.lt/session",
+  "endpointExecute": "https://dev-cafe.loca.lt/execute",
   "config": {
     "skillType": "BASE_CORPUS",
     "configMeta": [
