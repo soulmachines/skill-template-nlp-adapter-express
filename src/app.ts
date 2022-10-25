@@ -27,7 +27,7 @@ app.post('/init', async (req: Request, res: Response) => {
   const smRequest = req.body as InitRequest;
 
   // 2. Extract relevant data
-  const { projectId, config } = smRequest; // config only present if this Skill is stateless
+  const { projectId, config } = smRequest;
 
   // 2a. Extract skill config and its relevant credentials from the request
   const { firstCredentials, secondCredentials } = config! as any;
@@ -45,28 +45,33 @@ app.post('/init', async (req: Request, res: Response) => {
  * https://docs.soulmachines.com/skills/api#tag/Session
  *
  * Runs before the very first interaction between a user and a DP using this Skill
+ * Note that if this endpoint is mapped in skill definition file, the execute endpoint
+ * will not contain config in the SessionRequest
  */
 app.post('/session', async (req: Request, res: Response) => {
   // 1. Get the Soul Machines request object
   const smRequest = req.body as SessionRequest;
 
   // 2. Extract relevant data
-  const { sessionId, memory, config } = smRequest;
 
-  // 2a. Extract skill config and its relevant credentials from the request
-  const { firstCredentials, secondCredentials } = config! as any;
+  // 2a. Extract relevant credentials from config
+  const { firstCredentials, secondCredentials } = smRequest.config as any;
+
+  // 2b. Extract sessionId if required
+  const sessionId = smRequest.sessionId;
 
   // 3. Make request to third party service to initialize session-specific resources
   const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
 
   // 4. Extract relevant response data from the third party service
+  const memoryCredentials = fakeNLPService.persistCredentials(sessionId) as Memory[];
   const memoryResources = await fakeNLPService.initSessionResources(sessionId) as Memory[];
   
   // 5. Construct SM-formatted response body
   const smResponse: SessionResponse = {
     memory: [
-      ...memory ?? [],
-      ...memoryResources ?? [],
+      ...memoryCredentials,
+      ...memoryResources,
     ],
   };
 
@@ -78,14 +83,19 @@ app.post('/session', async (req: Request, res: Response) => {
  * https://docs.soulmachines.com/skills/api#tag/Execute
  *
  * Runs when user input is forwarded to this Skill
+ * Note that if the session endpoint is mapped in skill definition file, this endpoint
+ * will not contain config in the SessionRequest
  */
 app.post('/execute', async (req: Request, res: Response) => {
   // 1. Get the Soul Machines request object
   const smRequest = req.body as ExecuteRequest;
 
   // 2. Extract relevant data
-  // 2a. Extract skill config and its relevant credentials from the request
-  const { firstCredentials, secondCredentials } = smRequest.config! as any;
+  // 2a. when using stateless skill, extract relevant credentials from config
+  const { firstCredentials, secondCredentials } = smRequest.config as any;
+
+  // 2b. when using stateful skill, extract relevant credentials elsewhere (eg. memory) as config will not be present here
+  // const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
 
   // 2c. Extract user input
   const userInput = smRequest.text;

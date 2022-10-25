@@ -30,6 +30,18 @@ export class FakeNLPService {
     return mockInitResources(sessionId);
   }
 
+  // Example of persisting credentials during session endpoint with third party NLP call 
+  persistCredentials(sessionId: string) {
+    return [
+      {
+        sessionId,
+        name: "credentials",
+        value: { firstCredentials: this.firstCredentials, secondCredentials: this.secondCredentials},
+        scope: "PRIVATE",
+      },
+    ] as any[];
+  }
+
   // Example of sending input to the third party NLP call 
   send(userInput: string) {
     return mockGetResponse(userInput);
