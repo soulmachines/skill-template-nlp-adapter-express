@@ -54,7 +54,6 @@ export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => 
     };
 
     setTimeout(() => {
-      console.log(userInput);
       resolve({ spokenResponse, cardsResponse });
     }, 0);
   });
