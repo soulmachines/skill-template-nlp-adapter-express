@@ -47,7 +47,7 @@ export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => 
       myImageCard: {
         type: 'image',
         data: {
-          src: 'https://placekitten.com/200/200',
+          url: 'https://placekitten.com/200/200',
           alt: 'An adorable kitten',
         },
       },
