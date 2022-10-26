@@ -7,6 +7,7 @@
   "endpointInitialize": "https://dev-cafe.loca.lt/init",
   "endpointSession": "https://dev-cafe.loca.lt/session",
   "endpointExecute": "https://dev-cafe.loca.lt/execute",
+  "endpointEndProject": "https://dev-cafe.loca.lt/delete",
   "config": {
     "skillType": "BASE_CORPUS",
     "configMeta": [

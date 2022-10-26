@@ -122,6 +122,28 @@ app.post('/execute', async (req: Request, res: Response) => {
   res.send(smResponse);
 });
 
+/**
+ * Delete Endpoint
+ * https://docs.soulmachines.com/skills/api#tag/Delete
+ *
+ * Use this endpoint to implement any clean-up for a Skill when it is no longer used by a project.
+ * 
+ * Skills which make use of the init endpoint may find the delete endpoint particularly useful for
+ * cleaning up any long-running tasks or stored data associated with the provided projectId.
+ * 
+ * The delete endpoint will be called every time a DDNA Studio project using this Skill is deleted.
+ * It will also be called when a project using the Skill removes it, and is then redeployed.
+ */
+app.post('/delete/:projectId', async (req: Request, res: Response) => {
+  // 1. Get the Soul Machines Project ID
+  const projectId = req.params?.projectId;
+
+  // 2. Initiate any cleaning up of data or processes for this project
+  console.log(`Cleaned up project - ${projectId}`);
+
+  res.send();
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
