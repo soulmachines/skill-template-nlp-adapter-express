@@ -31,15 +31,12 @@ export class FakeNLPService {
   }
 
   // Example of persisting credentials during session endpoint with third party NLP call 
-  persistCredentials(sessionId: string) {
-    return [
-      {
-        sessionId,
-        name: "credentials",
-        value: { firstCredentials: this.firstCredentials, secondCredentials: this.secondCredentials},
-        scope: "PRIVATE",
-      },
-    ] as any[];
+  persistCredentials() {
+    return {
+      name: "credentials",
+      value: { firstCredentials: this.firstCredentials, secondCredentials: this.secondCredentials},
+      scope: "PRIVATE",
+    } as any;
   }
 
   // Example of sending input to the third party NLP call 

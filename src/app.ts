@@ -1,10 +1,12 @@
 import {
   ExecuteRequest,
   ExecuteResponse,
+  getMemoryValue,
   InitRequest,
   Memory,
   SessionRequest,
   SessionResponse,
+  setMemoryValue,
 } from '@soulmachines/smskillsdk';
 import { Request, Response } from 'express';
 import { FakeNLPService } from './fake-nlp-service';
@@ -63,17 +65,16 @@ app.post('/session', async (req: Request, res: Response) => {
   // 3. Make request to third party service to initialize session-specific resources
   const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
 
-  // 4. Extract relevant response data from the third party service
-  const memoryCredentials = fakeNLPService.persistCredentials(sessionId) as Memory[];
-  const memoryResources = await fakeNLPService.initSessionResources(sessionId) as Memory[];
+  // 4. Extract and handle relevant response data (eg set as Memory[])
+  const memories = await fakeNLPService.initSessionResources(sessionId) as Memory[];
+  
+  // 4a. Persist data (eg credentials) into Memory
+  const { name, value, scope } = fakeNLPService.persistCredentials() as Memory;
+  setMemoryValue(memories, name, value, sessionId, scope);
+
   
   // 5. Construct SM-formatted response body
-  const smResponse: SessionResponse = {
-    memory: [
-      ...memoryCredentials,
-      ...memoryResources,
-    ],
-  };
+  const smResponse: SessionResponse = { memory: memories };
 
   res.send(smResponse);
 });
@@ -92,10 +93,11 @@ app.post('/execute', async (req: Request, res: Response) => {
 
   // 2. Extract relevant data
   // 2a. when using stateless skill, extract relevant credentials from config
-  const { firstCredentials, secondCredentials } = smRequest.config as any;
+  // const { firstCredentials, secondCredentials } = smRequest.config as any;
 
   // 2b. when using stateful skill, extract relevant credentials elsewhere (eg. memory) as config will not be present here
-  // const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
+  const [_found, credentials] = getMemoryValue(smRequest.memory, 'credentials', smRequest.sessionId);
+  const { firstCredentials, secondCredentials } = credentials as any;
 
   // 2c. Extract user input
   const userInput = smRequest.text;
