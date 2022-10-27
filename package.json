@@ -1,17 +1,25 @@
 {
-  "name": "skill-nlp-adapter-template",
-  "version": "0.0.0",
-  "description": "",
+  "name": "skill-template-nlp-adapter-express",
+  "version": "0.0.1",
+  "description": "This ExpressJS application is a template for Skill Developers to use as a starting point for writing an NLP Adapter Skill.",
   "main": "src/app.ts",
   "scripts": {
-    "start": "nodemon --inspect src/app.js",
+    "start": "nodemon",
+    "start:debug": "nodemon --inspect src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": ">=16"
   },
-  "author": "",
-  "license": "ISC",
+  "contributors": [
+    "@tanyagray",
+    "@kai-sm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soulmachines/skill-template-nlp-adapter-express.git"
+  },
+  "license": "Apache-2.0",
   "dependencies": {
     "@soulmachines/smskillsdk": "^1.2.1-rc.0",
     "dotenv": "^16.0.3",

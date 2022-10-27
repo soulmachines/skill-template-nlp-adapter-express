@@ -3,11 +3,17 @@
  * and should be replaced with the actual HTTP calls when implementing.
  */
 
+/**
+ * Model of an example response
+ */
 interface MockGetResponse {
   spokenResponse: string;
   cardsResponse: object;
 }
 
+/**
+ * Example of an action performed by the Initalize ednpoint
+ */
 export const mockInitActions = (): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -18,6 +24,10 @@ export const mockInitActions = (): Promise<void> => {
   });
 };
 
+/**
+ * Example of an action performed by the Session ednpoint
+ * @param {string} sessionId - ID of the current session
+ */
 export const mockInitResources = (sessionId: string): Promise<any[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -40,7 +50,12 @@ export const mockInitResources = (sessionId: string): Promise<any[]> => {
   });
 };
 
+/**
+ * Example of an action performed by the Execute ednpoint
+ * @param {string} userInput - incoming user input
+ */
 export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => {
+  console.log(`User said: ${userInput}`);
   return new Promise((resolve) => {
     const spokenResponse = `Hello! @showcards(myImageCard) Here is a kitten.`;
     const cardsResponse = {

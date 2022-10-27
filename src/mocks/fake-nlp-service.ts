@@ -1,6 +1,9 @@
 import { mockGetResponse, mockInitResources, mockInitActions } from "./mock-request";
 
-// Example third party service
+/**
+ * Example of a third-party service
+ *
+ */
 export class FakeNLPService {
   firstCredentials: string;
   secondCredentials: string;
@@ -11,7 +14,9 @@ export class FakeNLPService {
     this.authenticate();
   }
 
-  // Example of using credentials to authenticate
+  /**
+   * Example of using credentials to authenticate
+   */ 
   private authenticate() {
     if (!this.firstCredentials || !this.secondCredentials) {
       throw Error('Incorrect credentials');
@@ -20,17 +25,25 @@ export class FakeNLPService {
     console.log('Authenticated!');
   }
 
-  // Example of initializing Skill-specific actions on third party NLP call
+  /**
+   * Example of initializing Skill-specific actions on third party NLP call
+   */
   initActions() {
     return mockInitActions();
   }
 
-  // Example of initializing resources with third party NLP call 
+  /**
+   * Example of initializing resources with third party NLP call 
+   * @param {string} sessionId - ID of the current session
+   */
   initSessionResources(sessionId: string) {
     return mockInitResources(sessionId);
   }
 
-  // Example of persisting credentials during session endpoint with third party NLP call 
+  /**
+   * Example of persisting credentials during session endpoint with third party NLP call 
+   * @param {string} sessionId - ID of the current session
+   */
   persistCredentials(sessionId: string) {
     return [
       {
@@ -42,7 +55,10 @@ export class FakeNLPService {
     ] as any[];
   }
 
-  // Example of sending input to the third party NLP call 
+  /**
+   * Example of sending input to the third party NLP call 
+   * @param {string} userInput - incoming user input
+   */
   send(userInput: string) {
     return mockGetResponse(userInput);
   }

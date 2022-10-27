@@ -7,9 +7,9 @@ import {
   SessionResponse,
 } from '@soulmachines/smskillsdk';
 import { Request, Response } from 'express';
-import { FakeNLPService } from './fake-nlp-service';
+import { FakeNLPService } from './mocks/fake-nlp-service';
+import express from 'express';
 
-const express = require('express');
 const app = express();
 const port = process.env.PORT ?? 3000;
 
@@ -27,10 +27,9 @@ app.post('/init', async (req: Request, res: Response) => {
   const smRequest = req.body as InitRequest;
 
   // 2. Extract relevant data
-  const { projectId, config } = smRequest;
 
   // 2a. Extract skill config and its relevant credentials from the request
-  const { firstCredentials, secondCredentials } = config! as any;
+  const { firstCredentials, secondCredentials } = smRequest.config as any;
 
   // 3. Make request to third party service to initialize
   // any configuration, data storage, or pre-training on the NLP service before executing this Skill
@@ -107,17 +106,17 @@ app.post('/execute', async (req: Request, res: Response) => {
   const { spokenResponse, cardsResponse } = await fakeNLPService.send(userInput);
 
   // 5. Construct SM-formatted response body
-  const smResponse: ExecuteResponse = {
+  const smResponse = {
     output: {
       text: spokenResponse,
       variables: {
-        _public: {
+        public: {
           ...cardsResponse,
         },
       },
     },
     endConversation: true,
-  };
+  } as ExecuteResponse;
 
   res.send(smResponse);
 });
