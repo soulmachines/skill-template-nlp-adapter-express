@@ -38,6 +38,7 @@ Test the app's endpoints using Postman:
 - POST Init: [http://localhost:3000/init]()
 - POST Session: [http://localhost:3000/session]()
 - POST Execute: [http://localhost:3000/execute]()
+- DELETE Delete: [http://localhost:3000/delete]()
 
 ## Debugging with VS Code
 
