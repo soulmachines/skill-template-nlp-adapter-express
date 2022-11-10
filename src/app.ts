@@ -133,7 +133,7 @@ app.post('/execute', async (req: Request, res: Response) => {
  * The delete endpoint will be called every time a DDNA Studio project using this Skill is deleted.
  * It will also be called when a project using the Skill removes it, and is then redeployed.
  */
-app.post('/delete/:projectId', async (req: Request, res: Response) => {
+app.delete('/delete/:projectId', async (req: Request, res: Response) => {
   // 1. Get the Soul Machines Project ID
   const projectId = req.params?.projectId;
 
