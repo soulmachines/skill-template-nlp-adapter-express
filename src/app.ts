@@ -2,6 +2,7 @@ import {
   ExecuteRequest,
   ExecuteResponse,
   InitRequest,
+  Intent,
   Memory,
   SessionRequest,
   SessionResponse,
@@ -91,10 +92,10 @@ app.post('/execute', async (req: Request, res: Response) => {
 
   // 2. Extract relevant data
   // 2a. when using stateless skill, extract relevant credentials from config
-  const { firstCredentials, secondCredentials } = smRequest.config as any;
+  // const { firstCredentials, secondCredentials } = smRequest.config as any;
 
   // 2b. when using stateful skill, extract relevant credentials elsewhere (eg. memory) as config will not be present here
-  // const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
+  const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
 
   // 2c. Extract user input
   const userInput = smRequest.text;
@@ -106,10 +107,27 @@ app.post('/execute', async (req: Request, res: Response) => {
   const { spokenResponse, cardsResponse } = await fakeNLPService.send(userInput);
 
   // 5. Construct SM-formatted response body
+
+  // 5a. Add your Intent if required
+  const intent: Intent = {
+    name: "Welcome",
+    confidence: 1,
+  };
+  
+  // 5b. Add your conversation annotations if you want to see metrics for your Skills on Studio Insights
+  const annotations = {
+    conv_tag: "Skill.BaseTemplate", 
+    conv_id: intent.name, 
+    conv_intent: intent.name, 
+    conv_type: "Entry",
+  };
+
   const smResponse = {
+    intent,
     output: {
       text: spokenResponse,
       variables: {
+        ...annotations,
         public: {
           ...cardsResponse,
         },
