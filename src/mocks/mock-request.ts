@@ -3,12 +3,16 @@
  * and should be replaced with the actual HTTP calls when implementing.
  */
 
+import { Intent } from "@soulmachines/smskillsdk";
+
 /**
  * Model of an example response
  */
 interface MockGetResponse {
+  intent: Intent;
   spokenResponse: string;
   cardsResponse: object;
+  annotations: object;
 }
 
 /**
@@ -57,7 +61,10 @@ export const mockInitResources = (sessionId: string): Promise<any[]> => {
 export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => {
   console.log(`User said: ${userInput}`);
   return new Promise((resolve) => {
+    // Response to be spoken by your Digital Person
     const spokenResponse = `Hello! @showcards(myImageCard) Here is a kitten.`;
+
+    // Add your Cards as required
     const cardsResponse = {
       myImageCard: {
         type: 'image',
@@ -68,8 +75,22 @@ export const mockGetResponse = (userInput: string): Promise<MockGetResponse> => 
       },
     };
 
+    // Add your Intent as required
+    const intent: Intent = {
+      name: "Welcome",
+      confidence: 1,
+    };
+
+    // If applicable, add your conversation annotations to see metrics for your Skill on Studio Insights
+    const annotations = {
+      conv_tag: "Skill.BaseTemplate", 
+      conv_id: intent.name, 
+      conv_intent: intent.name, 
+      conv_type: "Entry",
+    };
+
     setTimeout(() => {
-      resolve({ spokenResponse, cardsResponse });
+      resolve({ spokenResponse, cardsResponse, intent, annotations });
     }, 0);
   });
 };

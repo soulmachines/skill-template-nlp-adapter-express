@@ -91,10 +91,10 @@ app.post('/execute', async (req: Request, res: Response) => {
 
   // 2. Extract relevant data
   // 2a. when using stateless skill, extract relevant credentials from config
-  const { firstCredentials, secondCredentials } = smRequest.config as any;
+  // const { firstCredentials, secondCredentials } = smRequest.config as any;
 
   // 2b. when using stateful skill, extract relevant credentials elsewhere (eg. memory) as config will not be present here
-  // const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
+  const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
 
   // 2c. Extract user input
   const userInput = smRequest.text;
@@ -103,13 +103,15 @@ app.post('/execute', async (req: Request, res: Response) => {
   const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
 
   // 4. Extract relevant response data from the third party service
-  const { spokenResponse, cardsResponse } = await fakeNLPService.send(userInput);
+  const { spokenResponse, cardsResponse, intent, annotations } = await fakeNLPService.send(userInput);
 
   // 5. Construct SM-formatted response body
   const smResponse = {
+    intent,
     output: {
       text: spokenResponse,
       variables: {
+        ...annotations,
         public: {
           ...cardsResponse,
         },
