@@ -103,7 +103,7 @@ app.post('/execute', async (req: Request, res: Response) => {
   const userInput = smRequest.text;
 
   // 3. Make request to third party service
-  const fakeNLPService = new FakeNLPService(firstCredentials as string, secondCredentials as string);
+  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
 
   // 4. Extract relevant response data from the third party service
   const { spokenResponse, cardsResponse, intent, annotations } = await fakeNLPService.send(userInput);
