@@ -34,7 +34,7 @@ export const mockInitActions = (): Promise<void> => {
  */
 export const mockInitResources = (sessionId: string): Promise<Memory[]> => {
   
-  const memoryData1 : Memory = {
+  const memoryData1: Memory = {
     sessionId,
     name: "public string memory",
     value: "This is to be persisted",
