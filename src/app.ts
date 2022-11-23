@@ -96,8 +96,7 @@ app.post('/execute', async (req: Request, res: Response) => {
 
   // 2b. when using stateful skill, extract relevant credentials elsewhere (eg. memory) as config will not be present here
   const [, credentials] = getMemoryValue(smRequest.memory, "credentials") as [boolean, any]
-  const firstCredentials = credentials.firstCredentials;
-  const secondCredentials = credentials.secondCredentials;
+  const { firstCredentials, secondCredentials } = credentials;
 
   // 2c. Extract user input
   const userInput = smRequest.text;
