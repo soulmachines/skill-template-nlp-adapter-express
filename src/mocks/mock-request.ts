@@ -40,7 +40,7 @@ export const mockInitResources = (sessionId: string): Promise<Memory[]> => {
     value: "This is to be persisted",
     scope: MemoryScope.Public,
   }
-  const memoryData2 : Memory = {
+  const memoryData2: Memory = {
     sessionId,
     name: "private json memory",
     value: { example: "object" },
