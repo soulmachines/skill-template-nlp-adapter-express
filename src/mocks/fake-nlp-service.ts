@@ -1,4 +1,5 @@
 import { mockGetResponse, mockInitResources, mockInitActions } from "./mock-request";
+import { Memory, MemoryScope } from "@soulmachines/smskillsdk";
 
 /**
  * Example of a third-party service
@@ -50,9 +51,9 @@ export class FakeNLPService {
         sessionId,
         name: "credentials",
         value: { firstCredentials: this.firstCredentials, secondCredentials: this.secondCredentials},
-        scope: "PRIVATE",
+        scope: MemoryScope.Private,
       },
-    ] as any[];
+    ] as Memory[];
   }
 
   /**

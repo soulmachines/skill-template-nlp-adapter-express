@@ -1,6 +1,7 @@
 import {
   ExecuteRequest,
   ExecuteResponse,
+  getMemoryValue,
   InitRequest,
   Memory,
   SessionRequest,
@@ -63,8 +64,8 @@ app.post('/session', async (req: Request, res: Response) => {
   const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
 
   // 4. Extract relevant response data from the third party service
-  const memoryCredentials = fakeNLPService.persistCredentials(sessionId) as Memory[];
-  const memoryResources = await fakeNLPService.initSessionResources(sessionId) as Memory[];
+  const memoryCredentials = fakeNLPService.persistCredentials(sessionId);
+  const memoryResources = await fakeNLPService.initSessionResources(sessionId);
   
   // 5. Construct SM-formatted response body
   const smResponse: SessionResponse = {
@@ -94,13 +95,14 @@ app.post('/execute', async (req: Request, res: Response) => {
   // const { firstCredentials, secondCredentials } = smRequest.config as any;
 
   // 2b. when using stateful skill, extract relevant credentials elsewhere (eg. memory) as config will not be present here
-  const { firstCredentials, secondCredentials } = smRequest.memory[0].value;
+  const [, firstCredentials] = getMemoryValue(smRequest.memory, "firstCredentials")
+  const [, secondCredentials] = getMemoryValue(smRequest.memory, "secondCredentials")
 
   // 2c. Extract user input
   const userInput = smRequest.text;
 
   // 3. Make request to third party service
-  const fakeNLPService = new FakeNLPService(firstCredentials, secondCredentials);
+  const fakeNLPService = new FakeNLPService(firstCredentials as string, secondCredentials as string);
 
   // 4. Extract relevant response data from the third party service
   const { spokenResponse, cardsResponse, intent, annotations } = await fakeNLPService.send(userInput);
