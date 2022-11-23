@@ -117,8 +117,8 @@ app.post('/execute', async (req: Request, res: Response) => {
   const smResponse = {
     intent,
     output: {
+      variables,
       text: spokenResponse,
-      variables: variables,
     },
     endConversation: true,
   } as ExecuteResponse;
