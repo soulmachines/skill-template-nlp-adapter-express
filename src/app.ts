@@ -2,8 +2,8 @@ import {
   ExecuteRequest,
   ExecuteResponse,
   getMemoryValue,
+  Variables,
   InitRequest,
-  Memory,
   SessionRequest,
   SessionResponse,
 } from '@soulmachines/smskillsdk';
@@ -108,16 +108,17 @@ app.post('/execute', async (req: Request, res: Response) => {
   const { spokenResponse, cardsResponse, intent, annotations } = await fakeNLPService.send(userInput);
 
   // 5. Construct SM-formatted response body
+  const variables = {
+    ...annotations,
+    public: {
+      ...cardsResponse,
+    },
+  } as Variables
   const smResponse = {
     intent,
     output: {
       text: spokenResponse,
-      variables: {
-        ...annotations,
-        public: {
-          ...cardsResponse,
-        },
-      },
+      variables: variables,
     },
     endConversation: true,
   } as ExecuteResponse;
