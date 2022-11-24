@@ -3,7 +3,7 @@
  * and should be replaced with the actual HTTP calls when implementing.
  */
 
-import { Intent } from "@soulmachines/smskillsdk";
+import { Intent, Memory, MemoryScope } from "@soulmachines/smskillsdk";
 
 /**
  * Model of an example response
@@ -32,24 +32,24 @@ export const mockInitActions = (): Promise<void> => {
  * Example of an action performed by the Session ednpoint
  * @param {string} sessionId - ID of the current session
  */
-export const mockInitResources = (sessionId: string): Promise<any[]> => {
+export const mockInitResources = (sessionId: string): Promise<Memory[]> => {
+  
+  const memoryData1: Memory = {
+    sessionId,
+    name: "public string memory",
+    value: "This is to be persisted",
+    scope: MemoryScope.Public,
+  }
+  const memoryData2: Memory = {
+    sessionId,
+    name: "private json memory",
+    value: { example: "object" },
+    scope: MemoryScope.Private,
+  }
+
   return new Promise((resolve) => {
     setTimeout(() => {
-      const memory = [
-        {
-          sessionId,
-          name: "public string memory",
-          value: "This is to be persisted",
-          scope: "PUBLIC",
-        },
-        {
-          sessionId,
-          name: "private json memory",
-          value: { example: "object" },
-          scope: "PRIVATE",
-        },
-      ]; 
-      resolve(memory);
+      resolve([memoryData1, memoryData2]);
     }, 0);
   });
 };
